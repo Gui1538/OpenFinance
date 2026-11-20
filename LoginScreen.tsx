@@ -44,17 +44,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Conteúdo Superior */}
           <View style={styles.topSection}>
-            {/* Cabeçalho */}
             <View style={styles.header}>
               <Text style={styles.title}>Bem-vindo de volta!</Text>
               <Text style={styles.subtitle}>Faça login para continuar</Text>
             </View>
 
-            {/* Formulário */}
             <View style={styles.form}>
-              {/* Campo E-mail */}
               <View style={styles.inputContainer}>
                 <View style={styles.iconBox}>
                   <Text style={styles.inputEmoji}>✉️</Text>
@@ -71,7 +67,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 />
               </View>
 
-              {/* Campo Senha */}
               <View style={styles.inputContainer}>
                 <View style={styles.iconBox}>
                   <Text style={styles.inputEmoji}>🔒</Text>
@@ -93,7 +88,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 </TouchableOpacity>
               </View>
 
-              {/* Botão Principal Entrar */}
               <TouchableOpacity
                 style={styles.primaryButton}
                 onPress={handleLogin}
@@ -102,7 +96,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 <Text style={styles.primaryButtonText}>Entrar</Text>
               </TouchableOpacity>
 
-              {/* Link Criar uma conta */}
               <TouchableOpacity
                 style={styles.createAccountButton}
                 onPress={() => navigation?.navigate('Cadastro')}
@@ -111,14 +104,12 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 <Text style={styles.createAccountText}>Criar uma conta</Text>
               </TouchableOpacity>
 
-              {/* Divisor "ou" */}
               <View style={styles.dividerContainer}>
                 <View style={styles.dividerLine} />
                 <Text style={styles.dividerText}>ou</Text>
                 <View style={styles.dividerLine} />
               </View>
 
-              {/* Botão Entrar com Google */}
               <TouchableOpacity
                 style={styles.googleButton}
                 onPress={handleGoogleLogin}
@@ -132,12 +123,10 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             </View>
           </View>
 
-          {/* Rodapé Ilustrado (Onda suave + Gráfico crescente + Pilhas de moedas) */}
           <View style={styles.footerIllustration}>
             <View style={styles.waveBackground} />
 
             <View style={styles.illustrationContent}>
-              {/* Gráfico de barras crescentes */}
               <View style={styles.chartArea}>
                 <Text style={styles.trendSymbol}>↗</Text>
                 <View style={styles.barsContainer}>
@@ -148,7 +137,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
                 </View>
               </View>
 
-              {/* Pilhas de moedas douradas */}
               <View style={styles.coinsArea}>
                 <View style={styles.coinStack}>
                   <View style={styles.coin} />
