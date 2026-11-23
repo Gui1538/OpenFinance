@@ -1,2 +1,5 @@
-import LoginScreen from '../../../LoginScreen';
-export default function LoginRoute() { return <LoginScreen />; }
+import Auth from '@/features/auth/Auth';
+
+export default function LoginRoute() {
+  return <Auth />;
+}

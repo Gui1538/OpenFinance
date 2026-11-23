@@ -1,0 +1,72 @@
+rules_version = '2';
+
+// Cada usuário só enxerga e altera os próprios dados: users/{uid}/...
+// As validações abaixo espelham as restrições do SQLite (docs/MER.md).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function text(d, field, min, max) {
+      return d[field] is string && d[field].size() >= min && d[field].size() <= max;
+    }
+
+    function isoDate(value) {
+      return value is string && value.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid)
+        && request.resource.data.id == uid
+        && text(request.resource.data, 'nome', 1, 100)
+        && text(request.resource.data, 'email', 3, 200)
+        && request.resource.data.provider in ['password', 'google']
+        // Cadastro por e-mail exige data de nascimento; Google não informa e completa depois.
+        && (request.resource.data.provider == 'google' || isoDate(request.resource.data.dataNascimento));
+      allow update: if isOwner(uid) && request.resource.data.id == uid;
+      allow delete: if false;
+
+      // Categoria: nome, tipo, descricao (1..500)
+      match /categories/{id} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && request.resource.data.usuarioId == uid
+          && text(request.resource.data, 'nome', 1, 30)
+          && request.resource.data.tipo in ['essencial', 'nao_essencial']
+          && text(request.resource.data, 'descricao', 1, 500)
+          && request.resource.data.icone is string
+          && request.resource.data.cor is string;
+      }
+
+      // Despesa: precisa de uma categoria que exista (regra de negócio)
+      match /expenses/{id} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && request.resource.data.usuarioId == uid
+          && text(request.resource.data, 'nome', 1, 60)
+          && request.resource.data.tipo in ['fixa', 'variavel']
+          && text(request.resource.data, 'descricao', 1, 500)
+          && request.resource.data.valor is number
+          && request.resource.data.valor > 0
+          && isoDate(request.resource.data.data)
+          && request.resource.data.categoriaId is string
+          && exists(/databases/$(database)/documents/users/$(uid)/categories/$(request.resource.data.categoriaId));
+      }
+
+      match /revenues/{id} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && request.resource.data.usuarioId == uid
+          && text(request.resource.data, 'nome', 1, 60)
+          && request.resource.data.tipo in ['salario', 'venda', 'presente', 'investimento', 'outros']
+          && text(request.resource.data, 'descricao', 1, 500)
+          && request.resource.data.valor is number
+          && request.resource.data.valor > 0
+          && isoDate(request.resource.data.data);
+      }
+    }
+  }
+}

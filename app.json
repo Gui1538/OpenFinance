@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "OpenFinance",
+    "name": "FinanceApp",
     "slug": "OpenFinance",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,14 +28,15 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#0F7B3A",
           "android": {
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 76
           }
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
